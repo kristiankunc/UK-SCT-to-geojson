@@ -1,0 +1,3 @@
+[submodule "UK-Sector-File"]
+	path = UK-Sector-File
+	url = https://github.com/VATSIM-UK/UK-Sector-File.git
