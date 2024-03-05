@@ -76,7 +76,7 @@ for (const icao of airports) {
 		});
 	}
 
-	fs.writeFileSync(`out/${icao}.geojson`, JSON.stringify(geojson));
+	fs.writeFileSync(`out/${icao}.json`, JSON.stringify(geojson));
 }
 
 const waypoints: Fix[] = [];
@@ -133,4 +133,4 @@ for (const fix of waypoints) {
 	});
 }
 
-fs.writeFileSync("out/wayppints.geojson", JSON.stringify(geojson));
+fs.writeFileSync("out/wayppints.json", JSON.stringify(geojson));
