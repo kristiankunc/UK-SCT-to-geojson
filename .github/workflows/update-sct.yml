@@ -17,6 +17,8 @@ jobs:
                   submodules: true
             - name: Update submodules
               run: |
+                  git config --global user.name "GitHub Actions"
+                  git config --global user.email "bot@noreply.github.com"
                   git submodule update --remote --merge
                   git commit -am "ci: Update sector file"
                   git push
