@@ -1,0 +1,22 @@
+# create an action to update all the submodules to the latest release of the submodule main branch
+name: Update sector file
+
+on:
+    schedule:
+        - cron: "0 0 * * *"
+    workflow_dispatch:
+
+jobs:
+    update:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
+                  submodules: true
+            - name: Update submodules
+              run: |
+                  git submodule update --remote --merge
+                  git commit -am "ci: Update sector file"
+                  git push
