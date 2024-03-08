@@ -133,4 +133,4 @@ for (const fix of waypoints) {
 	});
 }
 
-fs.writeFileSync("out/wayppints.json", JSON.stringify(geojson));
+fs.writeFileSync("out/waypoints.json", JSON.stringify(geojson));
