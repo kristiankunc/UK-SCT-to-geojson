@@ -57,7 +57,7 @@ for (const icao of airports) {
 		geojson.features.push({
 			type: "Feature",
 			properties: {
-				description: runway.startId,
+				description: `${icao}/${runway.startId}`,
 			},
 			geometry: {
 				type: "Point",
@@ -67,7 +67,7 @@ for (const icao of airports) {
 		geojson.features.push({
 			type: "Feature",
 			properties: {
-				description: runway.endId,
+				description: `${icao}/${runway.endId}`,
 			},
 			geometry: {
 				type: "Point",
