@@ -28,6 +28,7 @@ for (const icao of airports) {
 		geojson.features.push({
 			type: "Feature",
 			properties: {
+				type: "airspace",
 				description: line.description,
 			},
 			geometry: {
@@ -44,7 +45,8 @@ for (const icao of airports) {
 		geojson.features.push({
 			type: "Feature",
 			properties: {
-				description: `${runway.icao} - ${runway.startId} / ${runway.endId}`,
+				type: "runway",
+				description: `${runway.startId}/${runway.endId}`,
 			},
 			geometry: {
 				type: "LineString",
@@ -57,6 +59,7 @@ for (const icao of airports) {
 		geojson.features.push({
 			type: "Feature",
 			properties: {
+				type: "runway-threshold",
 				description: `${icao}/${runway.startId}`,
 			},
 			geometry: {
@@ -67,6 +70,7 @@ for (const icao of airports) {
 		geojson.features.push({
 			type: "Feature",
 			properties: {
+				type: "runway-threshold",
 				description: `${icao}/${runway.endId}`,
 			},
 			geometry: {
@@ -124,6 +128,7 @@ for (const fix of waypoints) {
 	geojson.features.push({
 		type: "Feature",
 		properties: {
+			type: "waypoint",
 			description: fix.id,
 		},
 		geometry: {
