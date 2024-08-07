@@ -1,5 +1,5 @@
 import { parseDms } from "./coorinate-convert";
-import { AirspaceLine, Runway } from "./types";
+import { AirspaceLine, Coordinate, Runway } from "./types";
 import fs from "fs";
 
 export function readAirspace(path: string): AirspaceLine[] {
@@ -60,4 +60,17 @@ export function readRunways(path: string): Runway[] {
 	}
 
 	return res;
+}
+
+export function readCenter(path: string): Coordinate {
+	const rawCenter = fs.readFileSync(path, "utf-8").split("\n")[1];
+	console.log(rawCenter);
+	const split = rawCenter.split(" ");
+
+	console.log(split);
+
+	return {
+		lat: parseDms(split[0]),
+		lng: parseDms(split[1]),
+	};
 }

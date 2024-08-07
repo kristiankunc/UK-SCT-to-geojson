@@ -1,23 +1,49 @@
 import fs from "fs";
 import { AirspaceLine, Fix, Runway } from "./types";
 import { parseDms } from "./coorinate-convert";
-import { readAirspace, readRunways } from "./file-reader";
+import { readAirspace, readCenter, readRunways } from "./file-reader";
 
 const sct = "./UK-Sector-File";
+if (!fs.existsSync("./out")) fs.mkdirSync("./out");
+
+let airportCenterpoints: GeoJSON.FeatureCollection = {
+	type: "FeatureCollection",
+	features: [],
+};
 
 const airports = fs.readdirSync(`${sct}/Airports`);
 for (const icao of airports) {
 	let airspaceLines: AirspaceLine[] = [];
 	let runways: Runway[] = [];
+	let centerpoint: Fix | undefined;
 
 	const basePath = `${sct}/Airports/${icao}`;
 
 	const airspacePath = `${basePath}/Airspace.txt`;
 	const runwayPath = `${basePath}/Runway.txt`;
+	const basicPath = `${basePath}/Basic.txt`;
 
 	if (fs.existsSync(airspacePath)) airspaceLines = airspaceLines.concat(readAirspace(airspacePath));
-
 	if (fs.existsSync(runwayPath)) runways = runways.concat(readRunways(runwayPath));
+	if (fs.existsSync(basicPath))
+		centerpoint = {
+			id: icao,
+			coordinate: readCenter(basicPath),
+		};
+
+	if (centerpoint) {
+		airportCenterpoints.features.push({
+			type: "Feature",
+			properties: {
+				type: "airport",
+				description: icao,
+			},
+			geometry: {
+				type: "Point",
+				coordinates: [centerpoint.coordinate.lng, centerpoint.coordinate.lat],
+			},
+		});
+	}
 
 	const geojson: GeoJSON.FeatureCollection = {
 		type: "FeatureCollection",
@@ -82,6 +108,8 @@ for (const icao of airports) {
 
 	fs.writeFileSync(`out/${icao}.json`, JSON.stringify(geojson));
 }
+
+fs.writeFileSync("out/airport-centerpoints.json", JSON.stringify(airportCenterpoints));
 
 const waypoints: Fix[] = [];
 const rawFixes = fs.readFileSync(`${sct}/Navaids/FIXES_UK.txt`, "utf-8").split("\n");
